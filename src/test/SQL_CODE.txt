@@ -1,0 +1,34 @@
+ // Create actions.
+            TestSQLConnectionAction test = new TestSQLConnectionAction();
+            SendSQLQueryAction send = new SendSQLQueryAction();
+
+            // CONNECTION TEST. -- WORKS.
+            // Set Params for test.
+            test.host = "localhost";
+            test.password = "1234";
+            test.username = "SYSTEM";
+            test.port = "1521";
+
+
+
+        // Set Params for send.
+        send.host = "localhost";
+        send.password = "1234";
+        send.username = "SYSTEM";
+        send.port = "1521";  */
+
+        /* TABLE CREATION QUERY. -- WORKS.
+        send.query = "CREATE TABLE Persons2 (\n" +
+                "    PersonID int,\n" +
+                "    LastName varchar(255),\n" +
+                "    FirstName varchar(255),\n" +
+                "    Address varchar(255),\n" +
+                "    City varchar(255)\n" +
+                ")";
+
+
+        // GET DATA QUERY.
+        send.query = "SELECT * FROM PERSONS2";
+        // Run.
+
+        devToken = "iw2wttdhyvddCbT-1-pktCyAa0QeIaLw62lacDiFjds1";
