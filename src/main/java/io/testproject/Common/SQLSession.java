@@ -56,11 +56,7 @@ public class SQLSession {
         //if (!Service.equals("")) {
             //url = url + "/" + Service;
         //}
-        try {
-            Thread.sleep(5000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         connection = DriverManager.getConnection(url, dbUser, dbPassword);
         statement = connection.createStatement();
     }

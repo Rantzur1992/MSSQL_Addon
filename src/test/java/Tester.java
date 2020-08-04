@@ -23,32 +23,32 @@ public class Tester {
         init();
 
         // Create actions.
-       // TestSQLConnectionAction test = new TestSQLConnectionAction();
+        TestSQLConnectionAction test = new TestSQLConnectionAction();
         //SendSQLQueryAction send = new SendSQLQueryAction();
 
         // CONNECTION TEST. -- WORKS.
         // Set Params for test.
-        //test.host = "localhost";
-        //test.password = "1234";
-        //test.username = "db2inst1";
-        //test.port = "50000";
-        //test.databaseName = "books";
+        test.host = "localhost";
+        test.password = "1234";
+        test.username = "db2inst1";
+        test.port = "50000";
+        test.databaseName = "books";
         //test.SID = "xe";
         //test.Service = "xe";
-        //.run(test);
+        runner.run(test);
 
 
-        SendSQLQueryAction send = new SendSQLQueryAction();
+        //SendSQLQueryAction send = new SendSQLQueryAction();
 
-        send.host = "localhost";
-        send.password = "1234";
-        send.username = "db2inst1";
-        send.port = "50000";
-        send.databaseName = "books";
-        send.query = "SELECT * FROM authors";
+        //send.host = "localhost";
+        //send.password = "1234";
+        //send.username = "db2inst1";
+        //send.port = "50000";
+        //send.databaseName = "books";
+        //send.query = "SELECT * FROM authors";
         //test.SID = "xe";
         //test.Service = "xe";
-        runner.run(send);
+        //runner.run(send);
 
 
         tearDown();
