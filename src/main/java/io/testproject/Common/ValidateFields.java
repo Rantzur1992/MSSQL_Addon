@@ -50,7 +50,7 @@ public class ValidateFields {
 
 
     public static void connectionFields(String query, String DbName) throws IllegalArgumentException {
-        if (query.equals(""))
+        if (query.isEmpty())
             throw new IllegalArgumentException("The query field can't be empty");
         if(Strings.isNullOrEmpty(DbName))
             throw new IllegalArgumentException("The Database Name field can't be empty");
