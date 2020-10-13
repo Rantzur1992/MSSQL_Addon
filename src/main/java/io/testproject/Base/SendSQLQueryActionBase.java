@@ -31,7 +31,13 @@ public class SendSQLQueryActionBase {
 
     public String m_queryResponse = "";
 
-    public String m_dbName;
+    public String m_dbName = "";
+
+    public String m_dbEncrypt = "";
+
+    public String m_dbTrustCertificate = "";
+
+    public String m_dbTimeOut = "";
 
     // SQL settings
     private int sqlDefaultPort;
@@ -62,13 +68,18 @@ public class SendSQLQueryActionBase {
      * @param password    - The password for connecting to the host
      * @param query       - The query to send
      */
-    protected void registerFields(String host, String port, String username, String password, String query, String dbName) {
+    protected void registerFields(String host, String port, String username, String password,
+                                  String dbName, String dbEncrypt, String dbTrustCertificate,
+                                  String dbTimeOut, String query) {
         this.m_host = host;
         this.m_port = port;
         this.m_username = username;
         this.m_password = password;
-        this.m_query = query;
         this.m_dbName = dbName;
+        this.m_dbEncrypt = dbEncrypt;
+        this.m_dbTrustCertificate = dbTrustCertificate;
+        this.m_dbTimeOut = dbTimeOut;
+        this.m_query = query;
     }
 
     /**
@@ -81,7 +92,11 @@ public class SendSQLQueryActionBase {
         ActionReporter report = helper.getReporter();
 
         // Set the default values
-        if (m_port.equals("")) m_port = String.valueOf(sqlDefaultPort);
+        if (m_username.isEmpty()) m_username = "root";
+        if (m_port.isEmpty()) m_port = String.valueOf(sqlDefaultPort);
+        if (m_dbEncrypt.isEmpty()) m_dbEncrypt = "false";
+        if (m_dbTrustCertificate.isEmpty()) m_dbTrustCertificate = "false";
+        if (m_dbTimeOut.isEmpty()) m_dbTimeOut = "30";
 
         // Validate fields
         try {
@@ -96,7 +111,10 @@ public class SendSQLQueryActionBase {
         SQLSession sqlSession;
 
         try {
-            sqlSession = new SQLSession(sqlType, jdbcDriver, m_username, m_password, m_host, Integer.parseInt(m_port), m_dbName);
+            sqlSession = new SQLSession(sqlType, jdbcDriver, m_username, m_password, m_host, Integer.parseInt(m_port),
+                    m_dbName,  Boolean.parseBoolean(m_dbEncrypt),
+                    Boolean.parseBoolean(m_dbTrustCertificate),
+                    Integer.parseInt(m_dbTimeOut));
         } catch (ClassNotFoundException e) {
             report.result("Unable to load the jdbc driver \"" + jdbcDriver + "\". Exception: " + e.getMessage());
             return ExecutionResult.FAILED;

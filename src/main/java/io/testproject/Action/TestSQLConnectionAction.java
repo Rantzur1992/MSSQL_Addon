@@ -11,13 +11,13 @@ import io.testproject.java.sdk.v2.enums.ExecutionResult;
 import io.testproject.java.sdk.v2.exceptions.FailureException;
 import io.testproject.Base.TestSQLConnectionActionBase;
 
-@Action(name = "Test SQL Connection (Db2 Database)", description = "Test the connection to the IBM Db2 database")
+@Action(name = "Test SQL Connection (NEW MSSQL Database)", description = "Test the connection to the MSSQL Database")
 public class TestSQLConnectionAction extends TestSQLConnectionActionBase implements GenericAction {
 
     @Parameter(description = "Host or IP address")
     public String host = "";
 
-    @Parameter(description = "Port (Default: 50000)")
+    @Parameter(description = "Port (Default: 1433)")
     public String port = "";
 
     @Parameter(description = "User (Default: root)")
@@ -32,13 +32,22 @@ public class TestSQLConnectionAction extends TestSQLConnectionActionBase impleme
     @Parameter(description = "\"true\" if the connection is fine, \"false\" if not", direction = ParameterDirection.OUTPUT)
     public String isConnected = "";
 
+    @Parameter(description = "Should the data be encrypted? (Default: false)")
+    public String encrypt = "";
+
+    @Parameter(description = "Trust Server Certificate? (Default: false)")
+    public String trustServerCertificate = "";
+
+    @Parameter(description = "Login timeout (Default: 30 seconds)")
+    public String loginTimeout = "";
+
     public TestSQLConnectionAction() {
-        super("sqlserver", "com.ibm.db2.jcc.DB2Driver", 50000);
+        super("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver", 1433);
     }
 
     @Override
     public ExecutionResult execute(AddonHelper helper) throws FailureException {
-        registerFields(host, port, username, password, databaseName);
+        registerFields(host, port, username, password, databaseName, encrypt, trustServerCertificate, loginTimeout);
         ExecutionResult result = executeBase(helper);
         isConnected = super.m_isConnected;
         return result;

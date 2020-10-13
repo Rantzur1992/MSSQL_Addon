@@ -13,14 +13,14 @@ import io.testproject.Base.SendSQLQueryActionBase;
 
 import java.sql.SQLException;
 
-@Action(name ="Send SQL Query (Db2 Database)", description = "Send an SQL query to an IBM Db2 Database")
+@Action(name ="Send SQL Query (NEW MSSQL Database)", description = "Send an SQL query to an MSSQL Database")
 public class SendSQLQueryAction extends SendSQLQueryActionBase implements GenericAction {
 
     // Changed params to public.
     @Parameter(description = "Host or IP address")
     public String host = "";
 
-    @Parameter(description = "Port (Default: 50000)")
+    @Parameter(description = "Port (Default: 1433)")
     public String port = "";
 
     @Parameter(description = "User (Default: root)")
@@ -35,11 +35,20 @@ public class SendSQLQueryAction extends SendSQLQueryActionBase implements Generi
     @Parameter(description = "SQL Query")
     public String query = "";
 
+    @Parameter(description = "Should the data be encrypted? (Default: false)")
+    public String encrypt = "";
+
+    @Parameter(description = "Trust Server Certificate? (Default: false)")
+    public String trustServerCertificate = "";
+
+    @Parameter(description = "Login timeout (Default: 30 seconds)")
+    public String loginTimeout = "";
+
     @Parameter(description = "SQL output - JSON strings of the result", direction = ParameterDirection.OUTPUT)
     public String queryResponse = "";
 
     public SendSQLQueryAction() {
-        super("sqlserver", "com.ibm.db2.jcc.DB2Driver", 50000);
+        super("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver", 1433);
     }
 
     @Override
@@ -52,7 +61,7 @@ public class SendSQLQueryAction extends SendSQLQueryActionBase implements Generi
             query = query.substring(0, query.length() - 1);
         }
         // Register the action's field with the base class.
-        registerFields(host, port, username, password ,query, databaseName);
+        registerFields(host, port, username, password, databaseName, encrypt, trustServerCertificate, loginTimeout, query);
         // Run the base class to send the query and collect the response.
         ExecutionResult result = null;
         try {

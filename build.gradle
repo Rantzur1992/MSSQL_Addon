@@ -1,5 +1,5 @@
 group 'io.testproject'
-version '1.0.1'
+version '1.0.'
 
 apply plugin: 'java'
 
@@ -27,10 +27,9 @@ jar {
     dependsOn configurations.runtime
     from {
         // Removes TestProject SDK from the final jar file
-        (configurations.runtime - configurations.tpsdk).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+        (configurations.runtime - configurations.tpsdk).collect
+                {it.isDirectory() ? it : zipTree(it) } }
+                {exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'}
 
     // Extract SDK version
     from {
@@ -42,6 +41,8 @@ jar {
     }
 }
 
+
+
 dependencies {
     tpsdk files("${TP_SDK}")
     // https://mvnrepository.com/artifact/org.json/json
@@ -49,7 +50,6 @@ dependencies {
     compile 'javax.servlet:javax.servlet-api:3.1.0'
     // https://mvnrepository.com/artifact/javax.resource/javax.resource-api
     compile group: 'javax.resource', name: 'javax.resource-api', version: '1.7'
-    // https://mvnrepository.com/artifact/com.ibm.db2.jcc/db2jcc
-    compile group: 'com.ibm.db2.jcc', name: 'db2jcc', version: 'db2jcc4'
-
+    // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
+    compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '8.4.1.jre8'
 }

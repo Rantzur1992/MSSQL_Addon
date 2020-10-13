@@ -28,8 +28,6 @@ public class SQLSession {
     private Connection connection = null;
     private Statement statement = null;
 
-
-
     /**
      * The constructor of the SQLSession
      * Once initialized, a connection with the MySQL server is created.
@@ -43,21 +41,22 @@ public class SQLSession {
      * @throws  SQLException - An an sql error has been occurred
      *
      */
-    public SQLSession(String sqlType, String jdbcDriver, String dbUser, String dbPassword, String dbHost, int dbPort, String dbName) throws ClassNotFoundException, SQLException {
+    public SQLSession(String sqlType, String jdbcDriver, String dbUser, String dbPassword, String dbHost, int dbPort,
+                      String dbName, boolean dbEncrypt, boolean dbTrustCertificate,
+                      int dbTimeOut) throws ClassNotFoundException, SQLException {
         Class.forName(jdbcDriver);
         // Set URL
-        String url = String.format("jdbc:db2://%s:%s/%s", dbHost, dbPort, dbName);
-        // Add SID or Service name if applicable.
-        // Older format for SID.
-        //if (!SID.equals("")) {
-            //url = url + ":" + SID;
-        //}
-        // Newer format for Service.
-        //if (!Service.equals("")) {
-            //url = url + "/" + Service;
-        //}
+        //String url = String.format("jdbc:db2://%s:%s/%s", dbHost, dbPort, dbName);
+        String connectionUrl = String.format(
+                "jdbc:sqlserver://%s:%s;"
+                        + "database=%s;"
+                        + "user=%s;"
+                        + "password=%s;"
+                        + "encrypt=%s;"
+                        + "trustServerCertificate=%s;"
+                        + "loginTimeout=%s;", dbHost, dbPort, dbName, dbUser, dbPassword, dbEncrypt, dbTrustCertificate, dbTimeOut);
 
-        connection = DriverManager.getConnection(url, dbUser, dbPassword);
+        connection = DriverManager.getConnection(connectionUrl, dbUser, dbPassword);
         statement = connection.createStatement();
     }
 

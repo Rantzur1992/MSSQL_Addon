@@ -12,7 +12,7 @@ public class Tester {
     private final static String devToken = "kJCeheoppFyo8uaZ17k0JQyBck1qLIf5ZrynbI6t7Fk1";
 
     public static void init() throws InstantiationException {
-        runner = Runner.createWeb(devToken, AutomatedBrowserType.Chrome);
+        runner = Runner.create(devToken);
     }
 
     public static void tearDown() throws IOException {
@@ -23,32 +23,26 @@ public class Tester {
         init();
 
         // Create actions.
-        TestSQLConnectionAction test = new TestSQLConnectionAction();
+        //TestSQLConnectionAction test = new TestSQLConnectionAction();
         //SendSQLQueryAction send = new SendSQLQueryAction();
-
-        // CONNECTION TEST. -- WORKS.
-        // Set Params for test.
-        test.host = "localhost";
-        test.password = "1234";
-        test.username = "db2inst1";
-        test.port = "50000";
-        test.databaseName = "books";
-        //test.SID = "xe";
-        //test.Service = "xe";
-        runner.run(test);
+        //test.databaseName = "test";
+        //test.host = "localhost";
+        //test.username = "sa";
+        //test.password = "Soleterr123!";
+        //test.encrypt = "false";
+        //test.trustServerCertificate = "false";
+        //test.loginTimeout = "30";
+        //runner.run(test);
 
 
-        //SendSQLQueryAction send = new SendSQLQueryAction();
+        SendSQLQueryAction send = new SendSQLQueryAction();
 
-        //send.host = "localhost";
-        //send.password = "1234";
-        //send.username = "db2inst1";
-        //send.port = "50000";
-        //send.databaseName = "books";
-        //send.query = "SELECT * FROM authors";
-        //test.SID = "xe";
-        //test.Service = "xe";
-        //runner.run(send);
+        send.host = "localhost";
+        send.password = "Soleterr123!";
+        send.username = "sa";
+        send.databaseName = "test";
+        send.query = "SELECT * FROM authors";
+        runner.run(send);
 
 
         tearDown();
