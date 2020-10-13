@@ -11,7 +11,7 @@ import io.testproject.java.sdk.v2.enums.ExecutionResult;
 import io.testproject.java.sdk.v2.exceptions.FailureException;
 import io.testproject.Base.TestSQLConnectionActionBase;
 
-@Action(name = "Test SQL Connection (NEW MSSQL Database)", description = "Test the connection to the MSSQL Database")
+@Action(name = "Test SQL Connection (MSSQL Database)", description = "Test the connection to the MSSQL Database")
 public class TestSQLConnectionAction extends TestSQLConnectionActionBase implements GenericAction {
 
     @Parameter(description = "Host or IP address")

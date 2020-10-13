@@ -39,7 +39,13 @@ public class TestSQLConnectionActionBase {
 
     public String m_isConnected = "";
 
-    public String m_DbName;
+    public String m_DbName = "";
+
+    public String m_dbEncrypt = "";
+
+    public String m_dbTrustCertificate = "";
+
+    public String m_dbTimeOut = "";
 
     // SQL settings
     private int sqlDefaultPort;
@@ -65,12 +71,17 @@ public class TestSQLConnectionActionBase {
      * @param username - The username for connecting to the host
      * @param password - The password for connecting to the host
      */
-    protected void registerFields(String host, String port, String username, String password, String dbName) {
+    protected void registerFields(String host, String port, String username, String password,
+                                  String dbName, String dbEncrypt, String dbTrustCertificate,
+                                  String dbTimeOut) {
         this.m_host = host;
         this.m_port = port;
         this.m_username = username;
         this.m_password = password;
         this.m_DbName = dbName;
+        this.m_dbEncrypt = dbEncrypt;
+        this.m_dbTrustCertificate = dbTrustCertificate;
+        this.m_dbTimeOut = dbTimeOut;
     }
 
     /**
@@ -86,8 +97,11 @@ public class TestSQLConnectionActionBase {
         m_isConnected = "false";
 
         // Set the default values
-        if (m_port.equals("")) m_port = String.valueOf(sqlDefaultPort);
         if (m_username.equals("")) m_username = "root";
+        if (m_port.isEmpty()) m_port = String.valueOf(sqlDefaultPort);
+        if (m_dbEncrypt.isEmpty()) m_dbEncrypt = "false";
+        if (m_dbTrustCertificate.isEmpty()) m_dbTrustCertificate = "false";
+        if (m_dbTimeOut.isEmpty()) m_dbTimeOut = "30";
 
         // Validate fields
         try {
@@ -101,7 +115,10 @@ public class TestSQLConnectionActionBase {
 
         SQLSession sqlSession;
         try {
-            sqlSession = new SQLSession(sqlType, jdbcDriver, m_username, m_password, m_host, Integer.parseInt(m_port), m_DbName);
+            sqlSession = new SQLSession(sqlType, jdbcDriver, m_username, m_password, m_host, Integer.parseInt(m_port),
+                    m_DbName,  Boolean.parseBoolean(m_dbEncrypt),
+                    Boolean.parseBoolean(m_dbTrustCertificate),
+                    Integer.parseInt(m_dbTimeOut));
         } catch (Exception e) {
             report.result(e.getMessage());
             return ExecutionResult.FAILED;

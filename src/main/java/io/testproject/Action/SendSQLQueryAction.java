@@ -13,7 +13,7 @@ import io.testproject.Base.SendSQLQueryActionBase;
 
 import java.sql.SQLException;
 
-@Action(name ="Send SQL Query (NEW MSSQL Database)", description = "Send an SQL query to an MSSQL Database")
+@Action(name ="Send SQL Query (MSSQL Database)", description = "Send an SQL query to an MSSQL Database")
 public class SendSQLQueryAction extends SendSQLQueryActionBase implements GenericAction {
 
     // Changed params to public.
