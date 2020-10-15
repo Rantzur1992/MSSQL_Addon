@@ -62,10 +62,6 @@ public class Converter {
                 value = resultSet.getString(i + 1);
             } catch (SQLException e) {
                 value = "ERROR_READING_VALUE";
-                // TODO: Check this
-                /* This bug sometimes occurred in my tests.. it is rare and occurred on empty values
-                    This is how I recover from the bug
-                 */
             }
 
             jsonObject.put(key, value);

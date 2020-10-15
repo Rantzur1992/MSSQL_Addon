@@ -47,6 +47,9 @@ public class SendSQLQueryAction extends SendSQLQueryActionBase implements Generi
     @Parameter(description = "SQL output - JSON strings of the result", direction = ParameterDirection.OUTPUT)
     public String queryResponse = "";
 
+    @Parameter(description = "SQL output - JSON response of the result", direction = ParameterDirection.OUTPUT)
+    public String queryResponseAsJson = "";
+
     public SendSQLQueryAction() {
         super("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver", 1433);
     }
@@ -70,6 +73,7 @@ public class SendSQLQueryAction extends SendSQLQueryActionBase implements Generi
             e.printStackTrace();
         }
         queryResponse = super.m_queryResponse;
+        queryResponseAsJson = super.m_queryResponseAsJson;
         // Return the result of execution.
         return result;
     }

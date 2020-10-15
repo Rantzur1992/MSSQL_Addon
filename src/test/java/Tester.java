@@ -23,27 +23,27 @@ public class Tester {
         init();
 
         // Create actions.
-        //TestSQLConnectionAction test = new TestSQLConnectionAction();
-        //SendSQLQueryAction send = new SendSQLQueryAction();
-        //test.databaseName = "test";
-        //test.host = "localhost";
-        //test.username = "sa";
-        //test.password = "Soleterr123!";
-        //test.encrypt = "false";
-        //test.trustServerCertificate = "false";
-        //test.loginTimeout = "30";
-        //runner.run(test);
+/*        TestSQLConnectionAction test = new TestSQLConnectionAction();
+        SendSQLQueryAction send = new SendSQLQueryAction();
+        test.databaseName = "test";
+        test.host = "localhost";
+        test.username = "sa";
+        test.password = "Soleterr123!";
+        test.encrypt = "false";
+        test.trustServerCertificate = "false";
+        test.loginTimeout = "30";
+        runner.run(test);*/
 
 
         SendSQLQueryAction send = new SendSQLQueryAction();
-
         send.host = "localhost";
         send.password = "Soleterr123!";
         send.username = "sa";
         send.databaseName = "test";
-        send.query = "SELECT * FROM authors";
+        send.query = "SELECT TOP (1000) [brand_id]\n" +
+                "      ,[brand_name]\n" +
+                "  FROM [test].[production].[brands]";
         runner.run(send);
-
 
         tearDown();
     }

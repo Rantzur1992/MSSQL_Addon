@@ -1,5 +1,7 @@
 package io.testproject.Base;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.testproject.Common.Converter;
 import io.testproject.Common.SQLSession;
 import io.testproject.Common.ValidateFields;
@@ -8,7 +10,12 @@ import io.testproject.java.sdk.v2.enums.ExecutionResult;
 import io.testproject.java.sdk.v2.reporters.ActionReporter;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The io.testproject.Base for the action "Send SQL Query" in all addons
@@ -30,6 +37,8 @@ public class SendSQLQueryActionBase {
     public String m_query = "";
 
     public String m_queryResponse = "";
+
+    public String m_queryResponseAsJson = "";
 
     public String m_dbName = "";
 
@@ -135,14 +144,35 @@ public class SendSQLQueryActionBase {
 
         // In case we got data from the query, we extract the selectedRow into json
         if (resultSet != null) {
+            List<Map<String, Object>> rows = new ArrayList<>();
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
             while (resultSet.next()) {
-                // Convert the response to json string and save it on the output variable
+                // Convert the response to json string and save it on the output variable ( NOT AS JSON )
                 try {
                     m_queryResponse = m_queryResponse + Converter.convertResultSetToJson(resultSet).toString();
                 } catch (Exception e) {
-                    report.result("An error has occurred while reading the response from the server");
+                    report.result("An error has occurred while reading the response from the server: " + e);
                     return ExecutionResult.FAILED;
                 }
+
+                // Represent a row in DB. Key: Column name, Value: Column value
+                Map<String, Object> row = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    // Note that the index is 1-based
+                    String colName = rsmd.getColumnName(i);
+                    Object colVal = resultSet.getObject(i);
+                    row.put(colName, colVal);
+                }
+                rows.add(row);
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                m_queryResponseAsJson = objectMapper.writeValueAsString(rows.toString());
+            } catch (JsonProcessingException e) {
+                report.result("Failed to parse results: " + e);
+                return ExecutionResult.FAILED;
             }
         }
 
@@ -150,7 +180,7 @@ public class SendSQLQueryActionBase {
         sqlSession.free();
 
         // Report the final result
-        report.result("Successfully sent the query.\n The query Response is: \n" + m_queryResponse);
+        report.result("Successfully sent the query.\n The query Response is: \n" + m_queryResponse + "\n Query response as JSON is: " + m_queryResponseAsJson);
         return ExecutionResult.PASSED;
     }
 }

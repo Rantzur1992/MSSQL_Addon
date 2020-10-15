@@ -23,7 +23,7 @@ configurations {
 // JAR Task
 jar {
     assert file("${TP_SDK}").exists() : "TestProject SDK JAR file was not found, please update the TP_SDK variable"
-    archiveName "${rootProject.name}-${version}.jar"
+    archiveName "MSSQL.jar"
     dependsOn configurations.runtime
     from {
         // Removes TestProject SDK from the final jar file
