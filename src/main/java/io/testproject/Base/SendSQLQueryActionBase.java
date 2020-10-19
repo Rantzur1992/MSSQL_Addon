@@ -8,6 +8,8 @@ import io.testproject.Common.ValidateFields;
 import io.testproject.java.sdk.v2.addons.helpers.AddonHelper;
 import io.testproject.java.sdk.v2.enums.ExecutionResult;
 import io.testproject.java.sdk.v2.reporters.ActionReporter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -144,43 +146,30 @@ public class SendSQLQueryActionBase {
 
         // In case we got data from the query, we extract the selectedRow into json
         if (resultSet != null) {
-            List<Map<String, Object>> rows = new ArrayList<>();
-            ResultSetMetaData rsmd = resultSet.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-
+            JSONArray jsonArray = new JSONArray();
             while (resultSet.next()) {
                 // Convert the response to json string and save it on the output variable ( NOT AS JSON )
                 try {
+                    int total_columns = resultSet.getMetaData().getColumnCount();
+                    JSONObject obj = new JSONObject();
+                    for (int i = 0; i < total_columns; i++) {
+                        obj.put(resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase(), resultSet.getObject(i + 1));
+                    }
+                    jsonArray.put(obj);
                     m_queryResponse = m_queryResponse + Converter.convertResultSetToJson(resultSet).toString();
                 } catch (Exception e) {
                     report.result("An error has occurred while reading the response from the server: " + e);
                     return ExecutionResult.FAILED;
                 }
-
-                // Represent a row in DB. Key: Column name, Value: Column value
-                Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    // Note that the index is 1-based
-                    String colName = rsmd.getColumnName(i);
-                    Object colVal = resultSet.getObject(i);
-                    row.put(colName, colVal);
-                }
-                rows.add(row);
             }
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                m_queryResponseAsJson = objectMapper.writeValueAsString(rows.toString());
-            } catch (JsonProcessingException e) {
-                report.result("Failed to parse results: " + e);
-                return ExecutionResult.FAILED;
-            }
+            m_queryResponseAsJson = jsonArray.toString();
         }
 
         // Free object resources
         sqlSession.free();
 
         // Report the final result
-        report.result("Successfully sent the query.\n The query Response is: \n" + m_queryResponse + "\n Query response as JSON is: " + m_queryResponseAsJson);
+        report.result("Successfully sent the query.\n The query Response is: \n" + m_queryResponse + "\n Query response as JSON is: \n" + m_queryResponseAsJson);
         return ExecutionResult.PASSED;
     }
 }

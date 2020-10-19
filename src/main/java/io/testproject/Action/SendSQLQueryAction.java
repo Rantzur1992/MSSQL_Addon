@@ -47,7 +47,7 @@ public class SendSQLQueryAction extends SendSQLQueryActionBase implements Generi
     @Parameter(description = "SQL output - JSON strings of the result", direction = ParameterDirection.OUTPUT)
     public String queryResponse = "";
 
-    @Parameter(description = "SQL output - JSON response of the result", direction = ParameterDirection.OUTPUT)
+    @Parameter(description = "SQL output - JSON Object response of the result", direction = ParameterDirection.OUTPUT)
     public String queryResponseAsJson = "";
 
     public SendSQLQueryAction() {
